@@ -1,10 +1,14 @@
-﻿namespace ExcelUpload.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ExcelUpload.Models
 {
     public class ExcelData
     {
-        public string? Column1 { get; set; }
-        public string? Column2 { get; set; }
-        public string? Column3 { get; set; }
+        [Key]
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public string? Age { get; set; }
+        public string? City { get; set; }
     }
 
 }

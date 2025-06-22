@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using ExcelUpload.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExcelUpload.Data
@@ -9,5 +10,7 @@ namespace ExcelUpload.Data
             : base(options)
         {
         }
+
+        public DbSet<ExcelData> ExcelDatas { get; set; } = default;
     }
 }

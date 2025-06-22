@@ -48,13 +48,15 @@ namespace ExcelUpload.Controllers
                     {
                         dataList.Add(new ExcelData
                         {
-                            Column1 = worksheet.Cells[row, 1].Text,
-                            Column2 = worksheet.Cells[row, 2].Text,
-                            Column3 = worksheet.Cells[row, 3].Text
+                            Name = worksheet.Cells[row, 1].Text,
+                            Age = worksheet.Cells[row, 2].Text,
+                            City = worksheet.Cells[row, 3].Text
                         });
                     }
                 }
             }
+
+
 
             return View("List", dataList);
         }
