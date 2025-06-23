@@ -11,6 +11,7 @@ namespace ExcelUpload.Data
         {
         }
 
-        public DbSet<ExcelData> ExcelDatas { get; set; } = default;
+        public DbSet<Product> Product { get; set; }
+        public DbSet<Supplier> Supplier { get; set; }
     }
 }

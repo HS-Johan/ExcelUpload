@@ -1,4 +1,4 @@
-﻿@model List<ExcelUpload.Models.ExcelData>
+﻿@model List<ExcelUpload.ViewModel.ProductVM>
 
 @{
     ViewData["Title"] = "Excel Data List";
@@ -11,18 +11,36 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Age</th>
-                <th>City</th>
+                <th>ProductName</th>
+                <th>ProductDescription</th>
+                <th>SKU</th>
+                <th>ProductCategory</th>
+                <th>SupplierId</th>
+                <th>Stock</th>
+                <th>IsPublished</th>
+                <th>ActiveStartDate</th>
+                <th>SellPrice</th>
+                <th>BuyPrice</th>
+                <th>EmployeeCost</th>
+                <th>OtherCost</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.Name</td>
-                    <td>@item.Age</td>
-                    <td>@item.City</td>
+                    <td>@item.ProductName</td>
+                    <td>@item.ProductDescription</td>
+                    <td>@item.Sku</td>
+                    <td>@item.ProductCategory</td>
+                    <td>@item.SupplierId</td>
+                    <td>@item.Stock</td>
+                    <td>@item.IsPublished</td>
+                    <td>@item.ActiveStartDate</td>
+                    <td>@item.SellPrice</td>
+                    <td>@item.BuyPrice</td>
+                    <td>@item.EmployeeCost</td>
+                    <td>@item.OtherCost</td>
                 </tr>
             }
         </tbody>
