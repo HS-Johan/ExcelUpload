@@ -1,8 +1,10 @@
-﻿using ExcelUpload.Models;
+﻿using ExcelUpload.Data;
+using ExcelUpload.Models;
 using ExcelUpload.ViewModel;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.SqlServer.Server;
 using OfficeOpenXml;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +13,13 @@ namespace ExcelUpload.Controllers
 {
     public class ExcelController : Controller
     {
+        private readonly ApplicationDbContext _context;
+
+        public ExcelController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         [HttpGet]
         public IActionResult Upload()
         {
@@ -67,10 +76,65 @@ namespace ExcelUpload.Controllers
                 }
             }
 
+            var productCount = 0;
+
             foreach( var data in dataList )
             {
-                
+                if( data.ProductName != string.Empty && data.Sku != string.Empty && data.SellPrice >= 0 )
+                {
+                    var productExist = _context.Product.Where(x => x.Sku == data.Sku).FirstOrDefault();
+
+                    if( data.SupplierId == string.Empty )
+                    {
+                        data.SupplierId = "All";
+                    }
+
+                    if( productExist !=null )
+                    {
+                        
+                        productExist.ProductName = data.ProductName;
+                        productExist.SellPrice = data.SellPrice;
+
+                        _context.Product.Update(productExist);
+                        _context.SaveChanges();
+                    }
+                    else
+                    {
+                        Product product = new Product
+                        {
+                            ProductName = data.ProductName,
+                            //ProductDescription = data.ProductDescription,
+                            Sku = data.Sku,
+                            ProductCategory = data.ProductCategory,
+                            SupplierGuidId = _context.Supplier
+                                          .Where(x => x.SupplierName.Replace(" ", "").ToUpper() == data.SupplierId.Replace(" ", "").ToUpper())
+                                          .Select(x => x.SupplierGuidId)
+                                          .FirstOrDefault(),
+                            Stock = data.Stock,
+                            IsPublished = data.IsPublished,
+                            ActiveStartDate = data.ActiveStartDate,
+                            SellPrice = data.SellPrice,
+                            BuyPrice = data.BuyPrice,
+                            EmployeeCost = data.EmployeeCost,
+                            OtherCost = data.OtherCost,
+
+                            CreatedBy = Guid.Parse("B3DFF00D-1215-4AB1-935A-D73D81BF7E17"),
+                            UpdatedBy = Guid.Parse("B3DFF00D-1215-4AB1-935A-D73D81BF7E17"),
+
+                            CreatedAt = DateTime.Now,
+                            UpdatedAt = DateTime.Now
+                        };
+                        product.ProductGuidId = Guid.NewGuid();
+
+                        _context.Product.Add(product);
+                        _context.SaveChanges();
+                    }
+
+                    productCount++;
+                }
             }
+
+            var c = productCount;
 
             return View("List", dataList);
         }
